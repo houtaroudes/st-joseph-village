@@ -60,6 +60,15 @@ arch, clubhouse and chapel are all generated from geometry and a seeded PRNG. Co
 - There are no binary assets to license, and the repository is text only.
 - The layout is deterministic: `mulberry32(20260927)` means the same village every reload.
 
+The houses are the five models from the price list, built for real — Aralia is a flat-roofed row of
+three attached townhouses, Ilang-Ilang a single-storey hip, Sampaguita and Narra gabled (Narra with a
+ground-floor bay), and Molave the premium two-storey with a raised foyer and a covered lanai. They are
+mixed along the avenue by weighted band, so the walkthrough passes the entry models at the gate and
+the premium ones as it reaches the chapel, with the ridge-side columns taking the next model up. Doors,
+canopies, concrete paths, party walls, glazed ground floors and lit upstairs windows are all drawn as
+**instanced meshes**, so the extra architecture costs no extra draw calls — only the walls and the roof
+stay one mesh per house.
+
 Audio is deliberately absent. Autoplay is blocked, surprise sound is a bounce, and the tracks would be
 dead weight on mobile data.
 
