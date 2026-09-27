@@ -18,7 +18,7 @@ export default function useReveal() {
     const scan = () => document.querySelectorAll(".reveal:not(.visible)").forEach((el) => observer.observe(el));
     scan();
     // Sections render in one pass, but the site plan and calculator swap
-    // content on interaction — catch anything that appears later.
+    // content on interaction - catch anything that appears later.
     const t = setTimeout(scan, 400);
     return () => {
       clearTimeout(t);

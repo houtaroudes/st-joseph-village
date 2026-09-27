@@ -1,6 +1,6 @@
 # St. Joseph Village
 
-An interactive landing page for a fictional gated residential village in San Pedro, Laguna —
+An interactive landing page for a fictional gated residential village in San Pedro, Laguna,
 built as a **design and development demonstration**.
 
 > **Concept build.** St. Joseph Village, the developer name, the house models, the prices, the lot
@@ -13,14 +13,14 @@ A subdivision landing page with the things an actual subdivision page needs and 
 
 - **A cinematic scroll opening.** One pinned viewport, a camera flying from outside the gate, along
   the avenue, up over the village to the chapel plaza, with four copy beats handing off as you scroll.
-- **A generated 3D world.** The village is built from geometry at runtime — see below.
+- **A generated 3D world.** The village is built from geometry at runtime - see below.
 - **An interactive site plan.** Six phases, 68 lots, clickable, with real status, real areas and a
   computed price. Keyboard navigable: arrow keys move between lots, Enter selects, and the plan is a
   single tab stop (roving tabindex).
 - **A financing panel that does the arithmetic.** Reservation fee, downpayment spread, loanable
-  amount and monthly amortisation across Pag-IBIG, bank and in-house terms — the choice a Philippine
+  amount and monthly amortisation across Pag-IBIG, bank and in-house terms: the choice a Philippine
   buyer actually makes.
-- **A tripping form** — the site visit is the conversion here, not "contact us" — with a required
+- **A tripping form.** The site visit is the conversion here, not "contact us", with a required
   privacy consent, a `+63` mobile field, and a Messenger fallback, because that is where inquiries
   arrive.
 - **A dusk/night switch.** One table drives sky, fog, exposure, every light and every material, so
@@ -32,18 +32,18 @@ A subdivision landing page with the things an actual subdivision page needs and 
 - **A pointer that lights the world.** A warm ember rides just ahead of the camera and tracks the
   cursor (on touch, it centres itself ahead of the view); a screen-space glow sits under the pointer
   over the cinematic, and every card carries a matching ember.
-- **An interactive Google Map.** The address section embeds Google Maps — no API key, no billing —
+- **An interactive Google Map.** The address section embeds Google Maps with no API key and no billing,
   centred on San Pedro, Laguna.
 
 ## Look and feel
 
 Charcoal `#0A0807`, bone `#F4EFE7`, vermilion `#E8442A`, ember `#FF7A45`, ember gold `#F5A44C`,
-charred panel `#241109`. A modern UI pairing — **Space Grotesk** for the display, capped at the 72px
+charred panel `#241109`. A modern UI pairing: **Space Grotesk** for the display, capped at the 72px
 heading ceiling, with **Plus Jakarta Sans** for the body. Both are sans-only, so nothing reads as a
 stock editorial serif.
 
 This palette is deliberately the inverse of the limestone-and-forest first pass, which read as
-generic. The ember lives in the light sources — sky, lamps, windows, the cursor — and in the UI
+generic. The ember lives in the light sources (sky, lamps, windows, the cursor) and in the UI
 accents, rather than being poured over every surface.
 
 ## Why the village is generated instead of photographed
@@ -52,21 +52,21 @@ The original reference for this build shipped fourteen hand-painted WebP scene l
 tracks and a licensed font. None of that transfers: a real subdivision page would use the developer's
 architectural renders and drone footage, and this build has none of those.
 
-Rather than fill the gap with **stock photography of a different subdivision** — which would be both a
-poor demonstration and a misrepresentation — the ground, roads, houses, trees, street lamps, gate
+Rather than fill the gap with **stock photography of a different subdivision**, which would be both a
+poor demonstration and a misrepresentation, the ground, roads, houses, trees, street lamps, gate
 arch, clubhouse and chapel are all generated from geometry and a seeded PRNG. Consequences:
 
 - Nothing on the page depicts a real place, so nothing on it can mislead someone about a real property.
 - There are no binary assets to license, and the repository is text only.
 - The layout is deterministic: `mulberry32(20260927)` means the same village every reload.
 
-The houses are the five models from the price list, built for real — Aralia is a flat-roofed row of
+The houses are the five models from the price list, built for real: Aralia is a flat-roofed row of
 three attached townhouses, Ilang-Ilang a single-storey hip, Sampaguita and Narra gabled (Narra with a
 ground-floor bay), and Molave the premium two-storey with a raised foyer and a covered lanai. They are
 mixed along the avenue by weighted band, so the walkthrough passes the entry models at the gate and
 the premium ones as it reaches the chapel, with the ridge-side columns taking the next model up. Doors,
 canopies, concrete paths, party walls, glazed ground floors and lit upstairs windows are all drawn as
-**instanced meshes**, so the extra architecture costs no extra draw calls — only the walls and the roof
+**instanced meshes**, so the extra architecture costs no extra draw calls; only the walls and the roof
 stay one mesh per house.
 
 Audio is deliberately absent. Autoplay is blocked, surprise sound is a bounce, and the tracks would be
@@ -74,7 +74,7 @@ dead weight on mobile data.
 
 ## Performance
 
-The scene is **code-split** — Three.js is roughly a third of the bundle and is lazy-loaded, with a CSS
+The scene is **code-split**: Three.js is roughly a third of the bundle and is lazy-loaded, with a CSS
 gradient poster holding the frame until it arrives (or forever, if it fails):
 
 | chunk | size | gzip |
@@ -104,7 +104,7 @@ src/
     Nav / Address / Homes / Amenities / Faq / Footer / Icons
 ```
 
-`src/data/village.js` is the file to edit first — every number on the page comes from it, and the
+`src/data/village.js` is the file to edit first: every number on the page comes from it, and the
 disclaimer lives there too.
 
 ## Running it
@@ -128,7 +128,7 @@ This section is the reason the build can be honest, so it is not optional.
    none, because there is none.
 3. **Prices are illustrative.** Financing figures are arithmetic, not an offer of credit. Pag-IBIG
    and bank terms are set by the lender and move with the policy rate.
-4. **The form transmits nothing.** It validates, gates on consent, and shows a success state — no
+4. **The form transmits nothing.** It validates, gates on consent, and shows a success state: no
    endpoint, no storage. A production version collecting a name, mobile number and email would need a
    published privacy notice and explicit consent under the **Data Privacy Act of 2012 (RA 10173)**.
    The `pattern`/`inputMode` mobile field is `+63`-aware for the same reason it exists at all.

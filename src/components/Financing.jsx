@@ -5,7 +5,7 @@ import { IconArrow, IconCheck, IconLock } from "./Icons";
 
 /* A working sample computation rather than a static table. In the
    Philippines the deciding number is the monthly amortisation, and the
-   deciding question is always Pag-IBIG versus bank — so both are on the
+   deciding question is always Pag-IBIG versus bank - so both are on the
    panel, side by side, and the arithmetic is real. */
 
 const LOT_OPTION = {
@@ -41,14 +41,14 @@ export default function Financing() {
   };
 
   const summary = [
-    `${model.name} — ${peso(result.price)} (illustrative)`,
+    `${model.name} - ${peso(result.price)} (illustrative)`,
     `Scheme: ${scheme.label} at ${result.rate}% over ${result.term} years`,
     `Reservation fee: ${peso(result.reservation)} (deductible from the downpayment)`,
-    `Downpayment ${dpPct}%: ${peso(result.downpayment)} — ${peso(result.dpMonthly)}/mo for ${dpMonths} months after the reservation fee`,
+    `Downpayment ${dpPct}%: ${peso(result.downpayment)} - ${peso(result.dpMonthly)}/mo for ${dpMonths} months after the reservation fee`,
     `Loanable amount: ${peso(result.loanable)}`,
     `Monthly amortisation: ${peso(result.amortisation)}`,
     `Miscellaneous fees on turnover (approx. ${PAYMENT_TERMS.miscFeePct}%): ${peso(result.miscFees)}`,
-    "Illustrative arithmetic only — not an offer of credit. St. Joseph Village is a concept build.",
+    "Illustrative arithmetic only, not an offer of credit. St. Joseph Village is a concept build.",
   ].join("\n");
 
   const copy = async () => {
@@ -70,7 +70,7 @@ export default function Financing() {
         </h2>
         <p className="lede">
           Most buyers here choose between Pag-IBIG and a bank, so both are on the same panel. Move
-          the terms and the schedule updates — this is real amortisation arithmetic, not a
+          the terms and the schedule updates; this is real amortisation arithmetic, not a
           marketing table.
         </p>
       </div>
@@ -89,7 +89,7 @@ export default function Financing() {
             >
               {options.map((o) => (
                 <option key={o.id} value={o.id}>
-                  {o.name} — {peso(o.price)}
+                  {o.name} - {peso(o.price)}
                 </option>
               ))}
             </select>

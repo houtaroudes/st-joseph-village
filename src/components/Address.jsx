@@ -1,7 +1,7 @@
 import { CONNECTIONS, VILLAGE } from "../data/village";
 import { IconCheck, IconPin, IconRuler, IconRoad } from "./Icons";
 
-/* The map is the keyless Google Maps embed — an interactive map with no API
+/* The map is the keyless Google Maps embed - an interactive map with no API
    key and no billing, which is what a concept build should ship. A
    production deployment would swap the `src` for the Maps JavaScript API to
    drop surveyed pins, lot boundaries and a Walking/Biking layer. */
@@ -17,7 +17,7 @@ export default function Address() {
           Brgy. {VILLAGE.location.barangay}, <em>{VILLAGE.location.city}</em>
         </h2>
         <p className="lede">
-          On the ridge side of the city, minutes from the South Luzon Expressway — with the schools,
+          On the ridge side of the city, minutes from the South Luzon Expressway, with the schools,
           hospitals and malls of San Pedro and Biñan close at hand.
         </p>
       </div>
@@ -66,14 +66,14 @@ export default function Address() {
 
       <figure className="address-map reveal">
         <iframe
-          title="Map of San Pedro, Laguna — the area where St. Joseph Village is set"
+          title="Map of San Pedro, Laguna - the area where St. Joseph Village is set"
           src={MAP_SRC}
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           allowFullScreen
         />
         <figcaption>
-          <IconPin size={13} /> Interactive Google Map. The pin is the city center — the village is a
+          <IconPin size={13} /> Interactive Google Map. The pin is the city center. The village is a
           concept, so no surveyed boundary is shown.
         </figcaption>
       </figure>

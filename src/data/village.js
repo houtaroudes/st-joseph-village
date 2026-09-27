@@ -1,9 +1,9 @@
 /* ============================================================
-   St. Joseph Village — content + pricing model
+   St. Joseph Village - content + pricing model
 
    EVERYTHING in this file is illustrative. The developer, the prices,
    the lot inventory and the availability are invented for a design
-   demonstration. See DISCLAIMER below — it is rendered in the footer
+   demonstration. See DISCLAIMER below - it is rendered in the footer
    and must stay there.
    ============================================================ */
 
@@ -34,7 +34,7 @@ export const CONNECTIONS = [
   { place: "Alabang Town Center", km: 16, minutes: 25, note: "via SLEX" },
   { place: "Makati CBD", km: 33, minutes: 50, note: "via SLEX / Skyway" },
   { place: "SM Center San Pedro", km: 3, minutes: 8, note: "via National Hwy" },
-  { place: "De La Salle University – Laguna", km: 8, minutes: 16, note: "via SLEX, Biñan" },
+  { place: "De La Salle University - Laguna", km: 8, minutes: 16, note: "via SLEX, Biñan" },
   { place: "San Pedro City Hall", km: 2.5, minutes: 7, note: "via National Hwy" },
   { place: "NAIA Terminal 3", km: 28, minutes: 45, note: "via Skyway" },
 ];
@@ -53,7 +53,7 @@ export const MODELS = [
     beds: 2,
     baths: 1,
     price: 2_950_000,
-    blurb: "The starter home — a compact two-storey townhouse with its own carport.",
+    blurb: "The starter home, a compact two-storey townhouse with its own carport.",
     features: ["Corner-less inner unit", "Provision for 2nd floor", "Own carport", "RFO"],
   },
   {
@@ -65,7 +65,7 @@ export const MODELS = [
     beds: 3,
     baths: 2,
     price: 4_180_000,
-    blurb: "A modest single-detached on a 100 sqm lot — the easiest model to grow into.",
+    blurb: "A modest single-detached on a 100 sqm lot, the easiest model to grow into.",
     features: ["Single detached", "Carport + service area", "Powder room", "RFO"],
   },
   {
@@ -77,7 +77,7 @@ export const MODELS = [
     beds: 3,
     baths: 2,
     price: 5_650_000,
-    blurb: "Our most requested model — a three-bedroom with a family area upstairs.",
+    blurb: "Our most requested model: a three-bedroom with a family area upstairs.",
     features: ["Family area", "Maid's / utility room", "2-car carport", "Pre-selling"],
     featured: true,
   },
@@ -152,7 +152,7 @@ export const SCHEMES = {
     rate: 8.5,
     maxYears: 20,
     defaultYears: 20,
-    note: "Faster approval. Rates are typically fixed for the first 1–5 years, then repriced.",
+    note: "Faster approval. Rates are typically fixed for the first 1-5 years, then repriced.",
   },
   inhouse: {
     id: "inhouse",
@@ -191,7 +191,7 @@ export const BLOCKS = [
 export const FAQS = [
   {
     q: "Is this a real subdivision?",
-    a: "No — and the page says so. St. Joseph Village, Ilaya Land & Homes, the prices and the lot inventory are invented for a design demonstration. Nothing here is an offer to sell.",
+    a: "No, and the page says so. St. Joseph Village, Ilaya Land & Homes, the prices and the lot inventory are invented for a design demonstration. Nothing here is an offer to sell.",
   },
   {
     q: "What is covered by the reservation fee?",
@@ -203,7 +203,7 @@ export const FAQS = [
   },
   {
     q: "What are miscellaneous fees?",
-    a: "Roughly 5% of the contract price, payable at turnover. That covers transfer taxes, registration, documentary stamp tax and the usual processing — budget for it, because it is not part of the monthly amortisation.",
+    a: "Roughly 5% of the contract price, payable at turnover. That covers transfer taxes, registration, documentary stamp tax and the usual processing. Budget for it, because it is not part of the monthly amortisation.",
   },
   {
     q: "How long does turnover take?",
@@ -211,7 +211,7 @@ export const FAQS = [
   },
   {
     q: "What happens to my personal data?",
-    a: "This demo form does not transmit anything — it is a local interaction only. A real deployment must show a privacy notice and collect explicit consent under RA 10173, which is why the checkbox exists.",
+    a: "This demo form does not transmit anything; it is a local interaction only. A real deployment must show a privacy notice and collect explicit consent under RA 10173, which is why the checkbox exists.",
   },
 ];
 
@@ -220,7 +220,7 @@ export const FAQS = [
 ------------------------------------------------------------------- */
 export const DISCLAIMER = {
   badge: "Concept build",
-  short: "Design demonstration — not a real listing.",
+  short: "Design demonstration, not a real listing.",
   long: [
     "This is a design and development demonstration. St. Joseph Village, the developer name, the house models, the prices, the lot inventory and the availability shown on this page are invented for the purpose of illustrating a landing page and are not an offer to sell, a reservation, or a representation of any existing project.",
     "No license to sell is claimed or implied for this page. A real subdivision project in the Philippines may only be advertised or sold with a License to Sell issued by the Department of Human Settlements and Urban Development (DHSUD) under PD 957, and any genuine listing would be required to display it.",
@@ -232,7 +232,7 @@ export const DISCLAIMER = {
 export const CONTACT = {
   salesPhone: "+63 917 000 0000 (illustrative)",
   salesEmail: "sales@example.com (illustrative)",
-  officeHours: "Mon–Sat · 9:00 AM – 5:00 PM",
+  officeHours: "Mon-Sat · 9:00 AM - 5:00 PM",
   office: "On-site sales office, Brgy. Langgam, San Pedro, Laguna (illustrative)",
 };
 

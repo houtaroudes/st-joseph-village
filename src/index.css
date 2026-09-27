@@ -1,9 +1,9 @@
 /* ============================================================
-   St. Joseph Village — design system
+   St. Joseph Village - design system
 
    Charred ember, vermilion, bone. The base is near-black warm charcoal,
    the accent is vermilion, and the ember tint it drives does the glow work.
-   Space Grotesk carries the display; Plus Jakarta Sans does the body — a
+   Space Grotesk carries the display; Plus Jakarta Sans does the body - a
    modern UI pairing, deliberately sans-only so nothing reads as a stock
    editorial serif.
 
@@ -18,7 +18,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 ::selection{background:var(--clay);color:#FFF3EC}
 
 :root{
-  /* surfaces — warm charcoal, never blue-black */
+  /* surfaces - warm charcoal, never blue-black */
   --bg:#0A0807;
   --bg-card:#141110;
   --plate:#1D1815;
@@ -539,7 +539,7 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
    parallax. */
 .beat-cta{margin-top:24px;pointer-events:auto}
 
-/* Lot states. Sold lots stay clickable — being able to inspect what went
+/* Lot states. Sold lots stay clickable - being able to inspect what went
    is part of reading a plan. */
 .lot--available rect{fill:#141110;stroke:#F4EFE7;stroke-width:1.2}
 .lot--preselling rect{fill:#160F0C;stroke:#F5A44C;stroke-width:1.4;stroke-dasharray:5 3}
@@ -582,7 +582,7 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
 }
 
 /* ============================================================
-   Interactive layer — the parts the reference's behaviour contract
+   Interactive layer - the parts the reference's behaviour contract
    covers that a plain scroll page does not: navigation you can click or
    tab to, a pointer that lights the world, and a mood switch.
    ============================================================ */

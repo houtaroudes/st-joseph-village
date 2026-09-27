@@ -1,4 +1,4 @@
-/* Hand-rolled icons. One wrapper, one stroke weight, no icon package —
+/* Hand-rolled icons. One wrapper, one stroke weight, no icon package:
    nothing here can 404 or get renamed out from under the build. */
 
 const S = ({ size = 18, sw = 1.6, children, ...rest }) => (

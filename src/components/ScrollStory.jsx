@@ -9,7 +9,7 @@ const VillageScene = lazy(() => import("./VillageScene"));
 
 /* The cinematic opening, in the same spirit as the reference: one pinned
    viewport, a flying camera, and copy beats that hand off to each other as
-   the page scrolls. The difference is the world — that one shipped with
+   the page scrolls. The difference is the world - that one shipped with
    fourteen painted WebP layers, this one is generated at runtime. */
 
 const BEATS = [
@@ -28,13 +28,13 @@ const BEATS = [
   {
     eyebrow: "The address",
     title: "35 minutes to Alabang. An hour to Makati.",
-    text: "Close enough to commute, far enough that the evenings are quiet — with schools, hospitals and the expressway entrance all inside a short drive.",
+    text: "Close enough to commute, far enough that the evenings are quiet, with schools, hospitals and the expressway entrance all inside a short drive.",
     facts: ["SLEX · 33 km to Makati", "Skyway access", "SM San Pedro · 8 min"],
   },
   {
     eyebrow: "The plan",
     title: "Walk the whole village before you buy.",
-    text: "Every lot, every phase, every open space on one interactive plan — click a lot to see its area, its status and what it would cost.",
+    text: "Every lot, every phase, every open space on one interactive plan: click a lot to see its area, its status and what it would cost.",
     facts: ["Live inventory", "Lot-only or house-and-lot"],
     cta: { label: "Open the site plan", href: "#plan" },
   },
@@ -66,7 +66,7 @@ export default function ScrollStory() {
 
   /* The screen half of the pointer light: a warm wash that sits under the
      cursor, on top of the 3D ember, so the glow reads even on the beats
-     where the camera is looking away from the village. Desktop only — on
+     where the camera is looking away from the village. Desktop only - on
      touch it would just sit in the middle of the frame. */
   useEffect(() => {
     const glow = glowRef.current;
@@ -177,7 +177,7 @@ export default function ScrollStory() {
               className="story-rail-btn"
               aria-current={beat === i ? "true" : undefined}
               onClick={() => goTo(i)}
-              title={`Scene ${i + 1} — ${b.title}`}
+              title={`Scene ${i + 1} - ${b.title}`}
             >
               <span className="rail-label">{b.eyebrow}</span>
               <span className="rail-dot" aria-hidden="true" />

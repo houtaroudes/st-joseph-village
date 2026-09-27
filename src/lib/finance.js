@@ -4,7 +4,7 @@
    Standard annuity amortisation: M = P·r·(1+r)^n / ((1+r)^n − 1)
    where r is the monthly rate and n the number of months.
 
-   This is arithmetic, not an offer of credit — see DISCLAIMER.
+   This is arithmetic, not an offer of credit - see DISCLAIMER.
    ============================================================ */
 
 import { PAYMENT_TERMS, SCHEMES, LOT_PRICING } from "../data/village";

@@ -1,7 +1,7 @@
 import { DISCLAIMER, VILLAGE } from "../data/village";
 import { IconChapel } from "./Icons";
 
-/* The disclaimer is not a footnote in the legal sense — it is the reason
+/* The disclaimer is not a footnote in the legal sense - it is the reason
    this page can exist at all. It stays rendered, in the footer, on every
    viewport. */
 
@@ -40,7 +40,7 @@ export default function Footer() {
         <div className="foot-bottom">
           <span>
             <IconChapel size={13} style={{ verticalAlign: "-2px", marginRight: 6 }} />
-            {VILLAGE.name} — an interactive landing page concept. Not a real subdivision.
+            {VILLAGE.name}, an interactive landing page concept. Not a real subdivision.
           </span>
           <span>Built by Bryan Sacueza. Illustrative content only.</span>
         </div>

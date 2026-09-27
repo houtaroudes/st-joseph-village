@@ -10,22 +10,22 @@ import * as THREE from "three";
    walks a camera path through the result.
 
    That is deliberate. A real subdivision page is built out of renders and
-   drone footage, and this build has none of those — so instead of faking
+   drone footage, and this build has none of those - so instead of faking
    them with stock photography of somewhere else, the world is generated.
    Nothing here misrepresents a real place, and there is nothing to license.
 
    Props:
-     progressRef — ref holding 0..1 scroll progress for the sticky story
-     quality     — "high" | "low"; low drops the pixel ratio and the
+     progressRef - ref holding 0..1 scroll progress for the sticky story
+     quality     - "high" | "low"; low drops the pixel ratio and the
                    continuous loop, so the scene redraws only when the
                    scroll moves it (phones, small viewports)
-     onFail      — called if WebGL is unavailable, so the parent can show
+     onFail      - called if WebGL is unavailable, so the parent can show
                    the static poster instead
    ============================================================ */
 
 const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
 
-/* Deterministic layout — the same village every reload. */
+/* Deterministic layout - the same village every reload. */
 function mulberry32(seed) {
   let a = seed;
   return function random() {
@@ -111,7 +111,7 @@ const MOODS = {
    The five house models from src/data/village.js, built for real: each
    has its own footprint, storey count, roof silhouette and amount of
    glazing, so the walkthrough passes the range a buyer can actually
-   choose from. Invented, like everything else here — this is a concept
+   choose from. Invented, like everything else here - this is a concept
    village and not any real subdivision.
 
    `units` is how many attached bays the frontage is divided into (the
@@ -246,11 +246,11 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
     /* A warm ember that rides just ahead of the camera and tracks the
        cursor, so moving the pointer lights the village up rather than just
        nudging the camera. This is the pointer half of the behaviour
-       contract — the rest of the scene reacts, not only the view. */
+       contract - the rest of the scene reacts, not only the view. */
     /* Wider, softer falloff than a physical lamp (decay 1.15) so the light
        reaches the road and the nearest facades instead of a hot spot in the
        middle of the avenue. It is on for every device, coarse pointers
-       included — on touch it centres itself ahead of the camera. */
+       included - on touch it centres itself ahead of the camera. */
     const spot = new THREE.PointLight(0xff9a55, 0, 170, 1.2);
     spot.position.set(0, 20, 0);
     scene.add(spot);
@@ -309,7 +309,7 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
        hip roof, with the windows and doors drawn as instanced meshes. That
        is a lot more architecture than a box with a pyramid on it, but as
        every repeated part is instanced the extra detail costs no extra
-       draw calls — only the walls and the roof stay one mesh per house. */
+       draw calls - only the walls and the roof stay one mesh per house. */
     const wallMats = [
       track(new THREE.MeshStandardMaterial({ color: PALETTE.wall, roughness: 0.85 })),
       track(new THREE.MeshStandardMaterial({ color: PALETTE.wallWarm, roughness: 0.85 })),
@@ -411,7 +411,7 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
       trimSlots.push(local(x, z, rotY, 0, h + 0.34, 0, w + 0.7, 0.3, d + 0.7));
 
       if (roof === "flat") {
-        // Parapet, not a pitch — the townhouse row keeps one clean roofline.
+        // Parapet, not a pitch - the townhouse row keeps one clean roofline.
         trimSlots.push(local(x, z, rotY, 0, h + 0.62, 0, w + 0.45, 0.55, d + 0.45));
       } else if (roof === "gable") {
         // Ridge along the depth, so the gable end addresses the street.
@@ -501,7 +501,7 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
           if (random() < 0.1) continue; // gaps where a lot is still bare
           const x = col;
           // Weighted along the avenue, then nudged by how far out the column
-          // sits — the outer columns back onto the ridge and take the next
+          // sits - the outer columns back onto the ridge and take the next
           // model up, the innermost takes the next one down.
           let pick = weightedIndex(MODEL_MIX[band], random());
           if (col >= 53) pick = Math.min(BUILDS.length - 1, pick + 1);
@@ -541,7 +541,7 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
     trims.instanceMatrix.needsUpdate = true;
     scene.add(trims);
 
-    /* ---- Chapel — the emotional centre of the plan ---------------- */
+    /* ---- Chapel - the emotional centre of the plan ---------------- */
     const chapel = new THREE.Group();
     chapel.position.set(PLAZA.x, 0, PLAZA.z + 4);
     const chapelW = 15;
@@ -632,7 +632,7 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
     beam.position.set(0, 10.2, 0);
     gate.add(beam);
 
-    // Name plate, drawn to a canvas at runtime — no image asset.
+    // Name plate, drawn to a canvas at runtime - no image asset.
     const plate = document.createElement("canvas");
     plate.width = 1024;
     plate.height = 180;
@@ -802,9 +802,9 @@ export default function VillageScene({ progressRef, quality = "high", mood = "du
 
     /* ---- Render loop ----------------------------------------------
        Three modes, depending on the device and the user's preference:
-         reduced motion — one composed still, the camera never moves
-         low power      — draw only when the scroll progress changed
-         full           — continuous loop with drift and pointer parallax
+         reduced motion - one composed still, the camera never moves
+         low power      - draw only when the scroll progress changed
+         full           - continuous loop with drift and pointer parallax
     ---------------------------------------------------------------- */
     let raf = 0;
     let running = true;

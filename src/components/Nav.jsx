@@ -42,7 +42,7 @@ export default function Nav() {
       </nav>
 
       <div className="nav-right">
-        <span className="chip" title="Design demonstration — not a real listing">
+        <span className="chip" title="Design demonstration, not a real listing">
           Concept build
         </span>
         <a className="btn btn-primary nav-cta" href="#tripping">

@@ -9,7 +9,7 @@ import { IconArrow, IconLock, IconRuler } from "./Icons";
    This is the piece the reference didn't have. A cinematic scroll looks
    good; a buyer actually wants to see the inventory. Lots are laid out as
    an SVG so they stay crisp at any size, print correctly, and can be
-   reached by keyboard — with arrow keys moving between lots and Enter
+   reached by keyboard - with arrow keys moving between lots and Enter
    selecting one (roving tabindex, so the plan is a single tab stop).
    ============================================================ */
 
@@ -18,7 +18,7 @@ const LOT_H = 44;
 const GAP = 7;
 
 /* One phase is either a 4x3 block (12 lots) or a 5x2 block (10 lots). The
-   wide one is centred on the same column so the two never collide — the
+   wide one is centred on the same column so the two never collide - the
    first pass had phases 5 and 6 sitting on top of phases 3 and 4. */
 const BLOCK_W = 4 * LOT_W + 3 * GAP; // 229
 const BLOCK_W_WIDE = 5 * LOT_W + 4 * GAP; // 288
@@ -53,7 +53,7 @@ function statusFor(blockStatus, phase, index) {
   if (blockStatus === "sold") return "sold";
   if (blockStatus === "available") return "available";
   if (blockStatus === "preselling") return "preselling";
-  // "mixed" — a phase that has been open for a while.
+  // "mixed" - a phase that has been open for a while.
   const h = (phase * 37 + index * 17) % 100;
   if (h < 55) return "sold";
   if (h < 75) return "reserved";
@@ -135,13 +135,13 @@ export default function SitePlan() {
         </h2>
         <p className="lede">
           Six phases around a central avenue and the village plaza. Pick a lot to see its area,
-          whether it is still open, and what it would cost — lot only, with construction optional.
+          whether it is still open, and what it would cost: lot only, with construction optional.
         </p>
       </div>
 
       <div className="plan-shell reveal reveal-d1">
         <div className="plan-stage">
-          {/* On a phone the whole plan would shrink the lots to about 20px —
+          {/* On a phone the whole plan would shrink the lots to about 20px,
               too small to hit. Below 980px it keeps a minimum width and
               scrolls sideways instead. */}
           <div className="plan-scroll">
@@ -194,7 +194,7 @@ export default function SitePlan() {
                 onKeyDown={(e) => onKeyDown(e, i)}
               >
                 <rect x={lot.x} y={lot.y} width={LOT_W} height={LOT_H} rx="5" />
-                <title>{`Lot ${lot.id} — ${lot.area} sqm — ${STATUS_LABEL[lot.status]}`}</title>
+                <title>{`Lot ${lot.id} - ${lot.area} sqm - ${STATUS_LABEL[lot.status]}`}</title>
               </g>
             ))}
           </svg>

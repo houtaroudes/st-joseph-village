@@ -16,7 +16,7 @@ export default function App() {
 
   /* Ember that follows the pointer across the cards. Each card keeps its own
      local coordinates so the glow sits under the cursor rather than over
-     the page — cheap, and the single most visible thing that separates this
+     the page - cheap, and the single most visible thing that separates this
      from a static stack of panels. */
   useEffect(() => {
     const onMove = (e) => {

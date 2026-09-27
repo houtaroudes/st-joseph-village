@@ -24,7 +24,7 @@ export default function Amenities() {
           Amenities you will actually <em>use.</em>
         </h2>
         <p className="lede">
-          Not a list of features — the everyday things that make a subdivision feel like a village
+          Not a list of features: the everyday things that make a subdivision feel like a village
           rather than a row of houses. The chapel sits at the centre of the plan, on the plaza at
           the head of the avenue.
         </p>

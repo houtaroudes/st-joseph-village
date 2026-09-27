@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CONTACT, MODELS } from "../data/village";
 import { IconArrow, IconCalendar, IconChat, IconClock, IconLock, IconMail, IconPhone, IconPin } from "./Icons";
 
-/* In the Philippines the conversion is a tripping — the site visit — and
+/* In the Philippines the conversion is a tripping - the site visit - and
    the channel is usually Messenger, not email. Both are here.
 
    The submit is deliberately local: the form validates, shows its success
@@ -11,7 +11,7 @@ import { IconArrow, IconCalendar, IconChat, IconClock, IconLock, IconMail, IconP
    line. Pretending to email a fictional sales office would be the one
    part of this build that could actually mislead somebody. */
 
-const SLOTS = ["Morning (9–12)", "Afternoon (1–4)", "Late afternoon (4–6)"];
+const SLOTS = ["Morning (9-12)", "Afternoon (1-4)", "Late afternoon (4-6)"];
 
 export default function Tripping() {
   const [sent, setSent] = useState(false);
@@ -28,7 +28,7 @@ export default function Tripping() {
               Come see it before you decide.
             </h2>
             <p className="lede" style={{ marginTop: 12 }}>
-              Pick a day and we will walk you through the phase you are interested in — the avenue,
+              Pick a day and we will walk you through the phase you are interested in: the avenue,
               the plaza, the chapel and the lots that are still open.
             </p>
           </div>
@@ -52,7 +52,7 @@ export default function Tripping() {
 
           <div className="trip-map">
             <iframe
-              title="Google Map of San Pedro, Laguna — where St. Joseph Village is set"
+              title="Google Map of San Pedro, Laguna - where St. Joseph Village is set"
               src="https://www.google.com/maps?q=San+Pedro%2C+Laguna&z=14&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -61,7 +61,7 @@ export default function Tripping() {
           </div>
           <p className="plan-note" style={{ color: "rgba(246,241,231,0.55)" }}>
             <IconPin size={12} style={{ verticalAlign: "-2px", marginRight: 4 }} />
-            Interactive Google Map. The pin is the city center — the village is a concept, so no
+            Interactive Google Map. The pin is the city center. The village is a concept, so no
             surveyed boundary is drawn on it.
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function Tripping() {
         <div>
           {sent ? (
             <div className="form-done">
-              <h3>Thanks — that is the whole interaction.</h3>
+              <h3>Thanks. That is the whole interaction.</h3>
               <p>
                 Nothing was transmitted. This form is here to demonstrate the flow: validation, the
                 consent gate, and the success state.
@@ -139,7 +139,7 @@ export default function Tripping() {
                 <select id="trip-interest" className="select" name="interest" defaultValue="Lot only">
                   <option>Lot only</option>
                   {MODELS.map((m) => (
-                    <option key={m.id}>{`${m.name} — ${m.kind}`}</option>
+                    <option key={m.id}>{`${m.name} - ${m.kind}`}</option>
                   ))}
                 </select>
               </div>
@@ -191,7 +191,7 @@ export default function Tripping() {
               {!consent && (
                 <p className="form-status">
                   <IconLock size={12} style={{ verticalAlign: "-2px", marginRight: 4 }} />
-                  Consent is required before the form will submit — that is the point of the checkbox.
+                  Consent is required before the form will submit; that is the point of the checkbox.
                 </p>
               )}
               {channel && (
@@ -202,7 +202,7 @@ export default function Tripping() {
               )}
               <p className="form-status">
                 <IconCalendar size={12} style={{ verticalAlign: "-2px", marginRight: 4 }} />
-                Demo form — submitting sends nothing, anywhere.
+                Demo form: submitting sends nothing, anywhere.
               </p>
             </form>
           )}
