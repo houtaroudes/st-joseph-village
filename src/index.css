@@ -78,7 +78,6 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
   font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;
   color:var(--clay);margin-bottom:14px;
 }
-.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;opacity:.6}
 .display{font-size:var(--fs-display);line-height:1.02;letter-spacing:-0.02em}
 .h2{font-size:var(--fs-h2)}
 .lede{font-size:clamp(1rem,1.5vw,1.12rem);color:var(--muted);max-width:620px;letter-spacing:-0.005em}
@@ -176,7 +175,6 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
   font-size:0.66rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--gold-soft);margin-bottom:12px;display:flex;align-items:center;gap:10px;
 }
-.beat-eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.7}
 .beat-title{font-family:var(--font-display);font-size:clamp(30px,5.4vw,72px);line-height:1.04;letter-spacing:-0.02em;text-shadow:0 2px 40px rgba(6,4,3,0.75)}
 .beat-text{margin-top:14px;font-size:clamp(0.9rem,1.4vw,1.05rem);color:rgba(255,255,255,0.86);max-width:520px}
 .beat-facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
