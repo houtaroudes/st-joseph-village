@@ -9,6 +9,11 @@ lerna-debug.log*
 
 node_modules
 .vercel
+
+# Env files. *.local below only catches some of these.
+.env
+.env.*
+.npmrc
 dist
 dist-ssr
 *.local
