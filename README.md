@@ -74,13 +74,19 @@ dead weight on mobile data.
 
 ## Performance
 
-The scene is **code-split**: Three.js is roughly a third of the bundle and is lazy-loaded, with a CSS
-gradient poster holding the frame until it arrives (or forever, if it fails):
+The scene is **code-split**: Three.js and its renderer are most of the bundle and are lazy-loaded,
+with a CSS gradient poster holding the frame until they arrive (or forever, if they fail):
 
 | chunk | size | gzip |
 | --- | --- | --- |
-| `index.js` | ~395 kB | ~125 kB |
-| `VillageScene.js` | ~550 kB | ~139 kB |
+| `index.js` | ~397 kB | ~125 kB |
+| `VillageScene.js` | ~927 kB | ~248 kB |
+
+The scene was hand-written Three.js at ~550 kB (139 kB gzip) until Oct 3, 2026, when it was rebuilt
+as declarative components on **`@react-three/fiber`**, a React renderer for Three.js. That costs
+roughly **108 kB gzipped**, which is the price of bringing React's reconciler along: it is the one
+real regression in the switch, and it is paid only by visitors who scroll into the cinematic, because
+the chunk is lazy and the poster holds the frame in the meantime.
 
 Also: pixel ratio capped at 1.75 (1.2 on the low tier), drawing pauses when the canvas leaves the
 viewport or the tab is hidden, `prefers-reduced-motion` renders a single composed frame instead of a
@@ -95,8 +101,15 @@ src/
                           financing terms, FAQs, and the disclaimer
   lib/finance.js          annuity amortisation + the full sample computation
   lib/useReveal.js        IntersectionObserver reveal
+  scene/
+    World.jsx             the village as declarative components: sky, lights, ground,
+                          roads, houses, chapel, halls, gate, lamps, trees
+    CameraRig.jsx         scroll-driven camera path, drift, pointer parallax, ember light
+    plan.js               the generated layout: seeded placement, ground, tree scatter
+    materials.js          the shared material set, mood application, geometry
+    moods.js              the dusk and night colour tables
   components/
-    VillageScene.jsx      the Three.js village + scroll-driven camera path
+    VillageScene.jsx      the react-three-fiber canvas and the render-loop tiers
     ScrollStory.jsx       the pinned cinematic opening and its beats
     SitePlan.jsx          the interactive SVG plan, lot detail panel
     Financing.jsx         the calculator
