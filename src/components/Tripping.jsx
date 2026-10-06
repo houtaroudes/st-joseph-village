@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CONTACT, MODELS } from "../data/village";
+import { lotName, lotSummary } from "../lib/lots";
+import { useVillage } from "../lib/useVillage";
 import { IconArrow, IconCalendar, IconChat, IconClock, IconLock, IconMail, IconPhone, IconPin } from "./Icons";
 
 /* In the Philippines the conversion is a tripping - the site visit - and
@@ -13,10 +15,35 @@ import { IconArrow, IconCalendar, IconChat, IconClock, IconLock, IconMail, IconP
 
 const SLOTS = ["Morning (9-12)", "Afternoon (1-4)", "Late afternoon (4-6)"];
 
+/* A date field that accepts yesterday is a form that has to be re-filled
+   after a failed submit. Local date, not toISOString: that one is UTC, and
+   in Manila it would offer yesterday as "today" until 8am. */
+const todayISO = () => {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+
+const lotValue = (lot) => `lot:${lot.id}`;
+
 export default function Tripping() {
+  const { selectedLot, shortlistLots } = useVillage();
   const [sent, setSent] = useState(false);
   const [consent, setConsent] = useState(false);
   const [channel, setChannel] = useState(null);
+
+  const lotChoices = useMemo(() => {
+    const list = [];
+    const seen = new Set();
+    const push = (lot) => {
+      if (!lot || seen.has(lot.id)) return;
+      seen.add(lot.id);
+      list.push(lot);
+    };
+    push(selectedLot);
+    shortlistLots.forEach(push);
+    return list;
+  }, [selectedLot, shortlistLots]);
 
   return (
     <section className="trip" id="tripping">
@@ -67,6 +94,12 @@ export default function Tripping() {
         </div>
 
         <div>
+          {selectedLot && (
+            <p className="trip-context">
+              <IconPin size={14} />
+              Enquiring about <strong>{lotName(selectedLot)}</strong> · {lotSummary(selectedLot)}
+            </p>
+          )}
           {sent ? (
             <div className="form-done">
               <h3>Thanks. That is the whole interaction.</h3>
@@ -122,7 +155,14 @@ export default function Tripping() {
               <div className="form-row">
                 <div className="field">
                   <label htmlFor="trip-date">Preferred date</label>
-                  <input id="trip-date" className="input" type="date" name="date" required />
+                  <input
+                    id="trip-date"
+                    className="input"
+                    type="date"
+                    name="date"
+                    min={todayISO()}
+                    required
+                  />
                 </div>
                 <div className="field">
                   <label htmlFor="trip-slot">Time slot</label>
@@ -136,10 +176,27 @@ export default function Tripping() {
 
               <div className="field">
                 <label htmlFor="trip-interest">Interested in</label>
-                <select id="trip-interest" className="select" name="interest" defaultValue="Lot only">
-                  <option>Lot only</option>
+                {/* The plan's primary button says "Book a tripping for Lot
+                    3-07", so the form has to arrive holding Lot 3-07. It did
+                    not before: the button made a specific promise and the
+                    field silently dropped it. Keyed on the lot so switching
+                    lot resets the field to the new default, which is what
+                    the previous effect was doing the long way round. */}
+                <select
+                  key={selectedLot?.id ?? "none"}
+                  id="trip-interest"
+                  className="select"
+                  name="interest"
+                  defaultValue={selectedLot ? lotValue(selectedLot) : "lot-only"}
+                >
+                  {lotChoices.map((lot) => (
+                    <option key={lot.id} value={lotValue(lot)}>
+                      {`${lotName(lot)} - ${lot.area} sqm, Phase ${lot.phase}`}
+                    </option>
+                  ))}
+                  <option value="lot-only">Lot only</option>
                   {MODELS.map((m) => (
-                    <option key={m.id}>{`${m.name} - ${m.kind}`}</option>
+                    <option key={m.id} value={`model:${m.id}`}>{`${m.name} - ${m.kind}`}</option>
                   ))}
                 </select>
               </div>

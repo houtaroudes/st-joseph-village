@@ -14,9 +14,15 @@ A subdivision landing page with the things an actual subdivision page needs and 
 - **A cinematic scroll opening.** One pinned viewport, a camera flying from outside the gate, along
   the avenue, up over the village to the chapel plaza, with four copy beats handing off as you scroll.
 - **A generated 3D world.** The village is built from geometry at runtime - see below.
-- **An interactive site plan.** Six phases, 68 lots, clickable, with real status, real areas and a
-  computed price. Keyboard navigable: arrow keys move between lots, Enter selects, and the plan is a
-  single tab stop (roving tabindex).
+- **An interactive site plan.** Six phases, 68 lots, clickable, numbered, with real status, real
+  areas and a computed price. Keyboard navigable: the arrow keys move to the nearest lot on the drawn
+  plan, Enter selects, and the plan is a single tab stop (roving tabindex).
+- **Filtering, a shortlist, and a shareable lot.** The legend doubles as the filter, so soloing
+  Available ghosts the other 41 lots rather than hiding them: the plan keeps its shape and the map
+  stops lying about where the rest of the inventory is. Up to three lots can be set aside and are
+  priced side by side on identical terms, with the lowest monthly marked. The open lot is mirrored
+  into the URL, so it can be sent to somebody, and it carries through into the financing panel and
+  the tripping form instead of being dropped at the door.
 - **A financing panel that does the arithmetic.** Reservation fee, downpayment spread, loanable
   amount and monthly amortisation across Pag-IBIG, bank and in-house terms: the choice a Philippine
   buyer actually makes.
@@ -79,7 +85,7 @@ with a CSS gradient poster holding the frame until they arrive (or forever, if t
 
 | chunk | size | gzip |
 | --- | --- | --- |
-| `index.js` | ~397 kB | ~125 kB |
+| `index.js` | ~405 kB | ~128 kB |
 | `VillageScene.js` | ~927 kB | ~248 kB |
 
 The scene was hand-written Three.js at ~550 kB (139 kB gzip) until Oct 3, 2026, when it was rebuilt
@@ -87,6 +93,10 @@ as declarative components on **`@react-three/fiber`**, a React renderer for Thre
 roughly **108 kB gzipped**, which is the price of bringing React's reconciler along: it is the one
 real regression in the switch, and it is paid only by visitors who scroll into the cinematic, because
 the chunk is lazy and the poster holds the frame in the meantime.
+
+The buyer path added on Oct 6, 2026 (filtering, the shortlist, the shared lot state, the comparison
+arithmetic) cost about 8 kB on `index.js`, which is 3 kB gzipped. That is the whole price of the
+interaction layer, and it lands on the page rather than inside the scene chunk.
 
 Also: pixel ratio capped at 1.75 (1.2 on the low tier), drawing pauses when the canvas leaves the
 viewport or the tab is hidden, `prefers-reduced-motion` renders a single composed frame instead of a
@@ -100,6 +110,9 @@ src/
   data/village.js         all content: village, connections, models, lots, amenities,
                           financing terms, FAQs, and the disclaimer
   lib/finance.js          annuity amortisation + the full sample computation
+  lib/lots.js             the lot inventory: layout, sizes, status, geometry
+  lib/villageState.jsx    the shared buyer path: open lot, shortlist, calculator target
+  lib/useVillage.js       the context and hook that read it
   lib/useReveal.js        IntersectionObserver reveal
   scene/
     World.jsx             the village as declarative components: sky, lights, ground,

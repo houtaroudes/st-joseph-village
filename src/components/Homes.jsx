@@ -1,7 +1,10 @@
 import { LOT_PRICING, MODELS, peso } from "../data/village";
+import { useVillage } from "../lib/useVillage";
 import { IconArrow, IconCheck } from "./Icons";
 
 export default function Homes() {
+  const { computeFor } = useVillage();
+
   return (
     <section className="section" id="homes">
       <div className="section-head reveal">
@@ -54,7 +57,14 @@ export default function Homes() {
                 {peso(m.price)}
                 <small>house &amp; lot · indicative</small>
               </div>
-              <a className="btn btn-ghost" href="#financing">
+              {/* This used to be a plain anchor to #financing, so clicking
+                  Aralia scrolled to a calculator still priced on Sampaguita.
+                  It now loads the card you actually clicked. */}
+              <a
+                className="btn btn-ghost"
+                href="#financing"
+                onClick={() => computeFor(`model:${m.id}`)}
+              >
                 Compute this <IconArrow size={14} />
               </a>
             </div>

@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { MODELS, PAYMENT_TERMS, SCHEMES, peso } from "../data/village";
 import { lotPrice, sampleComputation } from "../lib/finance";
+import { LOT_BY_ID, lotSummary } from "../lib/lots";
+import { useVillage } from "../lib/useVillage";
 import { IconArrow, IconCheck, IconLock } from "./Icons";
 
 /* A working sample computation rather than a static table. In the
@@ -8,6 +10,9 @@ import { IconArrow, IconCheck, IconLock } from "./Icons";
    deciding question is always Pag-IBIG versus bank - so both are on the
    panel, side by side, and the arithmetic is real. */
 
+/* The fallback for somebody who has not picked a lot: a representative 150
+   sqm inner lot at the published rate. A real lot, chosen on the plan,
+   replaces it. */
 const LOT_OPTION = {
   id: "lot-only",
   name: "Lot only",
@@ -15,18 +20,53 @@ const LOT_OPTION = {
   note: "150 sqm inner lot",
 };
 
+const DEFAULT_MODEL_ID = "model:sampaguita";
+
 export default function Financing() {
-  const [modelId, setModelId] = useState("sampaguita");
+  const { selectedLot, shortlistLots, computeTargetId, computeFor } = useVillage();
+  const modelId = computeTargetId ?? DEFAULT_MODEL_ID;
   const [schemeId, setSchemeId] = useState("pagibig");
   const [dpPct, setDpPct] = useState(PAYMENT_TERMS.defaultDpPct);
   const [dpMonths, setDpMonths] = useState(PAYMENT_TERMS.defaultDpMonths);
   const [years, setYears] = useState(SCHEMES.pagibig.defaultYears);
   const [copied, setCopied] = useState(false);
 
-  const options = useMemo(
-    () => [...MODELS.map((m) => ({ id: m.id, name: m.name, price: m.price, note: `${m.kind} · ${m.lot} sqm lot · ${m.floor} sqm floor` })), LOT_OPTION],
-    []
-  );
+  /* Two things now feed this list that never used to: the lot open on the
+     plan, and the shortlist. Both are lot-only prices from the same table
+     the plan uses, so the panel can price a real lot instead of a stand-in.
+     Whatever the current selection points at is kept in the list as well,
+     so removing a lot from the shortlist cannot leave the select showing a
+     value for an option that is no longer there. */
+  const options = useMemo(() => {
+    const activeLotId = modelId.startsWith("lot:") ? modelId.slice(4) : null;
+    const lotOptions = [];
+    const seen = new Set();
+    const pushLot = (lot) => {
+      if (!lot || seen.has(lot.id)) return;
+      seen.add(lot.id);
+      lotOptions.push({
+        id: `lot:${lot.id}`,
+        name: `Lot ${lot.id}`,
+        price: lot.price,
+        note: `${lotSummary(lot)} · house construction optional`,
+      });
+    };
+    pushLot(selectedLot);
+    shortlistLots.forEach(pushLot);
+    pushLot(activeLotId ? LOT_BY_ID[activeLotId] : null);
+
+    return [
+      ...lotOptions,
+      ...MODELS.map((m) => ({
+        id: `model:${m.id}`,
+        name: m.name,
+        price: m.price,
+        note: `${m.kind} · ${m.lot} sqm lot · ${m.floor} sqm floor`,
+      })),
+      LOT_OPTION,
+    ];
+  }, [modelId, selectedLot, shortlistLots]);
+
   const model = options.find((o) => o.id === modelId) || options[0];
   const scheme = SCHEMES[schemeId];
 
@@ -85,7 +125,7 @@ export default function Financing() {
               id="calc-model"
               className="select"
               value={modelId}
-              onChange={(e) => setModelId(e.target.value)}
+              onChange={(e) => computeFor(e.target.value)}
             >
               {options.map((o) => (
                 <option key={o.id} value={o.id}>

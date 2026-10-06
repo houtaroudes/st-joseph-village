@@ -10,6 +10,7 @@ import Faq from "./components/Faq";
 import Tripping from "./components/Tripping";
 import Footer from "./components/Footer";
 import useReveal from "./lib/useReveal";
+import { VillageProvider } from "./lib/villageState";
 
 export default function App() {
   useReveal();
@@ -20,7 +21,7 @@ export default function App() {
      from a static stack of panels. */
   useEffect(() => {
     const onMove = (e) => {
-      const el = e.target?.closest?.(".model, .amen, .conn, .chapel-note");
+      const el = e.target?.closest?.(".model, .amen, .conn, .chapel-note, .shortlist-card");
       if (!el) return;
       const r = el.getBoundingClientRect();
       el.style.setProperty("--mx", `${e.clientX - r.left}px`);
@@ -31,7 +32,7 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <VillageProvider>
       <Nav />
       <main>
         <ScrollStory />
@@ -44,6 +45,6 @@ export default function App() {
         <Tripping />
       </main>
       <Footer />
-    </>
+    </VillageProvider>
   );
 }

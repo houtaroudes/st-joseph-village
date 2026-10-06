@@ -161,6 +161,34 @@ export const IconLock = (p) => (
   </S>
 );
 
+export const IconPlus = (p) => (
+  <S {...p}>
+    <path d="M12 5v14M5 12h14" />
+  </S>
+);
+
+export const IconClose = (p) => (
+  <S {...p}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </S>
+);
+
+export const IconLink = (p) => (
+  <S {...p}>
+    <path d="M10.5 13.5a4 4 0 0 1 0-5.7l2.8-2.8a4 4 0 0 1 5.7 5.7l-1.4 1.4" />
+    <path d="M13.5 10.5a4 4 0 0 1 0 5.7l-2.8 2.8a4 4 0 0 1-5.7-5.7l1.4-1.4" />
+  </S>
+);
+
+export const IconScale = (p) => (
+  <S {...p}>
+    <path d="M12 3v18" />
+    <path d="M5 7h14" />
+    <path d="M5 7 2.5 13a2.5 2.5 0 0 0 5 0L5 7Z" />
+    <path d="M19 7l-2.5 6a2.5 2.5 0 0 0 5 0L19 7Z" />
+  </S>
+);
+
 export const IconRoad = (p) => (
   <S {...p}>
     <path d="M8 3 5 21M16 3l3 18" />

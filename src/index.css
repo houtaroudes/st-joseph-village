@@ -240,7 +240,7 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
 .plan-shell{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-card);
   box-shadow:var(--shadow-soft);padding:clamp(16px,2.6vw,28px);
-  display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(18px,2.4vw,30px);align-items:start;
+  display:grid;grid-template-columns:1.9fr 1fr;gap:clamp(18px,2.4vw,30px);align-items:start;
 }
 .plan-stage{min-width:0}
 .plan-svg{width:100%;height:auto;display:block}
@@ -252,13 +252,105 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
 .plan-svg .road{fill:rgba(244,239,231,0.06)}
 .plan-svg .greens{fill:rgba(255,122,69,0.10)}
 .plan-svg .plan-label{font-family:var(--font-body);font-size:9px;font-weight:600;letter-spacing:0.14em;fill:var(--muted);text-transform:uppercase}
-.plan-svg .plan-num{font-family:var(--font-body);font-size:7px;font-weight:600;fill:rgba(244,239,231,0.5)}
+/* The lot number, drawn inside the lot. Sized for the rendered plan rather
+   than the 980-unit canvas: at 7px on that canvas it landed around 4px on
+   screen, which is a smudge rather than a label. */
+.plan-svg .plan-num{
+  font-family:var(--font-body);font-size:11px;font-weight:600;
+  fill:rgba(244,239,231,0.62);pointer-events:none;user-select:none;
+}
 .plan-svg .chapel-mark{fill:var(--clay)}
-.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:0.72rem;color:var(--muted)}
-.legend-item{display:inline-flex;align-items:center;gap:7px}
-.legend-swatch{width:14px;height:10px;border-radius:3px;border:1px solid var(--border-strong)}
+
+/* Filter chips, which is what the static swatch legend became. */
+.plan-filters{
+  display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--border);
+}
+.plan-chips{display:flex;flex-wrap:wrap;gap:8px}
+.plan-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-body);font-size:0.72rem;font-weight:600;letter-spacing:0.02em;
+  padding:7px 12px;border-radius:var(--radius-pill);
+  background:var(--plate);border:1px solid var(--border);color:var(--ink);
+  transition:background .2s,border-color .2s,color .2s;
+}
+.plan-chip:hover{border-color:var(--border-strong)}
+.plan-chip[aria-pressed="true"]{background:rgba(232,68,42,0.16);border-color:var(--clay);color:var(--ivory)}
+.plan-chip b{font-family:var(--font-display);font-size:0.8rem;font-weight:600;color:var(--muted)}
+.plan-chip[aria-pressed="true"] b{color:var(--ember)}
+.plan-chip--all{margin-right:4px}
+.swatch{width:13px;height:10px;border-radius:3px;border:1px solid var(--border-strong);flex:none}
+.swatch--available{background:#141110;border-color:#F4EFE7}
+.swatch--preselling{background:#160F0C;border-color:#F5A44C;border-style:dashed}
+.swatch--reserved{background:#2A1510;border-color:#FF7A45}
+.swatch--sold{background:#0A0807;border-color:rgba(244,239,231,0.16)}
+.plan-selects{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.select--compact{
+  width:auto;font-size:0.78rem;padding:9px 34px 9px 13px;
+  background-position:calc(100% - 16px) 50%,calc(100% - 10px) 50%;
+}
+.plan-reset{
+  font-family:var(--font-body);font-size:0.72rem;font-weight:600;color:var(--ember);
+  background:none;border:none;padding:8px 4px;text-decoration:underline;text-underline-offset:3px;
+}
+.plan-result{margin-top:10px;font-size:0.75rem;color:var(--muted)}
 
 .plan-panel{display:grid;gap:14px;align-content:start}
+.plan-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.plan-card-tools{display:flex;gap:6px;flex:none}
+.icon-btn{
+  width:32px;height:32px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  transition:border-color .2s,color .2s;
+}
+.icon-btn:hover{border-color:var(--ember);color:var(--ember)}
+.plan-short{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  font-family:var(--font-body);font-size:0.78rem;font-weight:600;
+  padding:11px 16px;border-radius:var(--radius-pill);
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  transition:border-color .2s,color .2s,background .2s;
+}
+.plan-short:hover:not(:disabled){border-color:var(--ember);color:var(--ember)}
+.plan-short[aria-pressed="true"]{background:rgba(245,164,76,0.14);border-color:var(--gold);color:var(--gold-soft)}
+.plan-short:disabled{cursor:not-allowed;opacity:.5}
+
+/* Shortlist: the comparison the plan could not do. Appears only once a lot
+   has been set aside, so it costs the page nothing until it is wanted. */
+.shortlist{
+  margin-top:clamp(18px,3vh,28px);padding:clamp(16px,2.4vw,26px);
+  background:var(--plate);border:1px solid var(--border);border-radius:var(--radius-card);
+}
+.shortlist-head{
+  display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;justify-content:space-between;
+  margin-bottom:16px;
+}
+.shortlist-title{font-family:var(--font-display);font-size:1.2rem}
+.shortlist-sub{font-size:0.74rem;color:var(--muted);margin-top:4px}
+.shortlist-head .plan-short{width:auto}
+.shortlist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.shortlist-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;
+}
+.shortlist-card-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.shortlist-card h4{font-family:var(--font-display);font-size:1.15rem}
+.shortlist-best{
+  font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:#1A0C06;background:var(--gold);border-radius:var(--radius-pill);padding:4px 9px;flex:none;
+}
+.shortlist-meta{font-size:0.72rem;color:var(--muted)}
+.shortlist-rows{display:grid;gap:7px}
+.shortlist-rows > div{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:0.8rem}
+.shortlist-rows dt{color:var(--muted)}
+.shortlist-rows dd{font-weight:600}
+.shortlist-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:auto;padding-top:6px}
+.shortlist-link{
+  font-family:var(--font-body);font-size:0.74rem;font-weight:600;color:var(--muted);
+  background:none;border:none;padding:0;text-decoration:underline;text-underline-offset:3px;
+}
+.shortlist-link:hover{color:var(--ember)}
 .plan-empty{
   border:1px dashed var(--border-strong);border-radius:var(--radius-md);
   padding:24px 20px;color:var(--muted);font-size:0.84rem;text-align:center;background:var(--plate);
@@ -278,13 +370,6 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
 .spec-row dd{font-weight:600}
 .plan-note{font-size:0.72rem;color:var(--muted);margin-top:12px}
 .plan-actions{display:flex;flex-direction:column;gap:9px;margin-top:16px}
-.plan-totals{display:flex;gap:8px;flex-wrap:wrap}
-.mini-stat{
-  flex:1;min-width:80px;border:1px solid var(--border);border-radius:var(--radius-md);
-  padding:12px 14px;background:var(--bg-card);
-}
-.mini-stat strong{display:block;font-family:var(--font-display);font-size:1.3rem;color:var(--clay);line-height:1.1}
-.mini-stat span{font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
 
 /* ===== Homes ===== */
 .model-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -546,10 +631,6 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
 .lot.is-active rect{stroke:#E8442A;stroke-width:2.6;stroke-dasharray:none}
 .lot:focus-visible rect{stroke:#E8442A;stroke-width:2.6;stroke-dasharray:none}
 .lot:focus-visible{outline:none}
-.legend-swatch--available{background:#141110;border-color:#F4EFE7}
-.legend-swatch--preselling{background:#160F0C;border-color:#F5A44C;border-style:dashed}
-.legend-swatch--reserved{background:#2A1510;border-color:#FF7A45}
-.legend-swatch--sold{background:#0A0807;border-color:rgba(244,239,231,0.16)}
 .plan-empty svg{color:var(--forest-soft)}
 .calc-hero .calc-label{display:block;margin-bottom:10px}
 
@@ -576,7 +657,10 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
   .model-grid{grid-template-columns:1fr}
   .model--featured{grid-column:span 1}
   .form-row{grid-template-columns:1fr}
-  .legend{gap:10px}
+  .plan-filters{justify-content:flex-start}
+  .plan-selects{width:100%}
+  .select--compact{flex:1}
+  .shortlist-grid{grid-template-columns:1fr}
 }
 
 /* ============================================================
@@ -640,14 +724,14 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
 }
 
 /* Ember that follows the pointer across the cards. */
-.model,.amen,.conn,.chapel-note{position:relative;overflow:hidden}
-.model::before,.amen::before,.conn::before,.chapel-note::before{
+.model,.amen,.conn,.chapel-note,.shortlist-card{position:relative;overflow:hidden}
+.model::before,.amen::before,.conn::before,.chapel-note::before,.shortlist-card::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;
   transition:opacity .4s var(--ease-out);
   background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(232,68,42,0.2),transparent 62%);
 }
-.model:hover::before,.amen:hover::before,.conn:hover::before,.chapel-note:hover::before{opacity:1}
-.model>*,.amen>*,.conn>*,.chapel-note>*{position:relative;z-index:1}
+.model:hover::before,.amen:hover::before,.conn:hover::before,.chapel-note:hover::before,.shortlist-card:hover::before{opacity:1}
+.model>*,.amen>*,.conn>*,.chapel-note>*,.shortlist-card>*{position:relative;z-index:1}
 
 @media (max-width:980px){
   .story-rail{right:14px;gap:12px}
@@ -655,3 +739,41 @@ h1 em,h2 em{font-style:normal;color:var(--ember)}
   .story-mood{top:calc(var(--nav-h) + 10px);right:16px}
   .mood-btn{padding:6px 11px;font-size:0.6rem}
 }
+
+/* ============================================================
+   Plan lot labels and states, second pass (Oct 6, 2026).
+
+   Last in the file on purpose: these override the base lot styles and the
+   late-addition block above. The :not(.is-active) guard is the point of it,
+   because a lot you have open has to stay legible even when the filter has
+   ghosted everything around it.
+   ============================================================ */
+.plan-svg .lot--available .plan-num{fill:#F4EFE7}
+.plan-svg .lot--preselling .plan-num{fill:var(--gold-soft)}
+.plan-svg .lot--reserved .plan-num{fill:var(--ember)}
+.plan-svg .lot--sold .plan-num{fill:rgba(244,239,231,0.3)}
+.plan-svg .lot.is-active .plan-num{fill:var(--clay)}
+
+/* Filtered out is not hidden: the plan keeps its shape, the ghosted lots stay
+   clickable, and the map never lies about where the other lots are. */
+.plan-svg .lot.is-dim:not(.is-active) rect{
+  fill:#0E0B0A;stroke:rgba(244,239,231,0.09);stroke-dasharray:none;
+}
+.plan-svg .lot.is-dim:not(.is-active) .plan-num{fill:rgba(244,239,231,0.13)}
+.plan-svg .lot.is-dim:hover{filter:brightness(1.3)}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* The lot the form is being filled in for, carried down from the plan. */
+.trip-context{
+  display:flex;align-items:center;flex-wrap:wrap;gap:9px;
+  font-size:0.8rem;color:rgba(246,241,231,0.86);
+  background:rgba(246,241,231,0.06);border:1px solid rgba(246,241,231,0.18);
+  border-radius:var(--radius-pill);padding:10px 16px;margin-bottom:14px;
+}
+.trip-context svg{color:var(--gold-soft);flex:none}
+.trip-context strong{color:var(--ivory);font-weight:600}
+
