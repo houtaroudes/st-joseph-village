@@ -1,0 +1,61 @@
+# Runs the checks that gate this repo: the plan's tests, the linter, and the
+# build. The build is the one that matters most, because a broken build is what
+# takes the live site down, and it runs the same command Vercel runs.
+#
+# There is deliberately no security audit step here, unlike the portfolio repo.
+# This project has one open high advisory on a build-time transitive dependency
+# (source-map-js below 1.2.2, GHSA-68fv-2mgg-jv7q), so an audit gate would be
+# red on every push from its first run, and a gate that is always red is a gate
+# everybody learns to ignore. Clear the advisory with `npm audit fix`, then add
+# the step the portfolio uses:
+#
+#   - name: Audit dependencies
+#     run: npm audit --audit-level=moderate
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A push that supersedes an earlier one makes the earlier run pointless, so
+# cancel it instead of paying for both.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Test, lint and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      # npm ci, not npm install: it installs exactly what package-lock.json
+      # pins, so CI cannot pass on a version the lock file does not describe.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # The plan's rules, in plain node: no browser, no network, no
+      # dependencies of its own, which makes this the fastest step and the one
+      # that reports a broken rule first.
+      - name: Test
+        run: npm test
+
+      # Same command Vercel runs, so a green run here means the deploy will
+      # build.
+      - name: Build
+        run: npm run build
