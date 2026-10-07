@@ -64,6 +64,9 @@ test("phase and size filters compose, and can leave nothing", () => {
   const phase5 = visibleLots(LOTS, { statuses: null, phase: 5, minArea: "any" });
   assert.equal(phase5.length, 10);
   assert.ok(phase5.every((l) => l.phase === 5));
+  // A phase or a size on its own is a filter, with no status involved.
+  assert.equal(filterIsActive({ statuses: null, phase: 5, minArea: "any" }), true);
+  assert.equal(filterIsActive({ statuses: null, phase: "all", minArea: 150 }), true);
 
   // The threshold comes from the data, so this case cannot go stale if the
   // size ladder ever changes.
@@ -110,6 +113,25 @@ test("arrow down follows the column, including in the two 5-wide phases", () => 
 test("an arrow at the edge of the plan has nowhere to go", () => {
   assert.equal(nextFocus(LOTS, EVERY_LOT, "1-01", "ArrowLeft"), null);
   assert.equal(nextFocus(LOTS, EVERY_LOT, "1-01", "ArrowUp"), null);
+});
+
+test("an arrow crosses into the block ahead, and never wraps a row end", () => {
+  // The plan is one map, not six islands. An arrow with nothing left in its
+  // own phase crosses to the phase ahead of it, matched row against row,
+  // rather than wrapping round or stopping dead at a phase edge.
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "1-04", "ArrowRight")?.id, "3-01");
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "3-01", "ArrowLeft")?.id, "1-04");
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "1-09", "ArrowDown")?.id, "2-01");
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "5-01", "ArrowLeft")?.id, "3-04");
+
+  // A row start is not a wrap point: nothing sits to the left of column 0.
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "1-05", "ArrowLeft"), null);
+
+  // The rightmost phase is the right edge of the plan, and the bottom of the
+  // left column is the floor.
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "5-05", "ArrowRight"), null);
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "5-10", "ArrowRight"), null);
+  assert.equal(nextFocus(LOTS, EVERY_LOT, "2-12", "ArrowDown"), null);
 });
 
 test("only the four arrow keys move the plan", () => {
@@ -178,6 +200,12 @@ test("the comparison prices every shortlisted lot on the plan's opening terms", 
   // computed there would come out at two different prices.
   assert.equal(rows[0].monthly, sampleComputation({ price: a.price, ...PLAN_TERMS }).amortisation);
   assert.equal(lowestMonthly, Math.min(rows[0].monthly, rows[1].monthly));
+
+  // And the terms it priced on are the ones it was handed: a shorter term on
+  // the same lot has to cost more per month.
+  const shortTerm = planComparison([a], { ...PLAN_TERMS, years: 10 }).rows[0].monthly;
+  const longTerm = planComparison([a], { ...PLAN_TERMS, years: 30 }).rows[0].monthly;
+  assert.ok(shortTerm > longTerm);
 });
 
 test("a shortlist of one is never called the lowest monthly", () => {

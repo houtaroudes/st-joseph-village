@@ -18,6 +18,7 @@ import {
   lotSummary,
 } from "../lib/lots";
 import {
+  NO_FILTERS,
   PLAN_ARROW_KEYS,
   PLAN_TERMS,
   filterIsActive,
@@ -59,9 +60,10 @@ export default function SitePlan() {
     useVillage();
 
   const [focusIdx, setFocusIdx] = useState(0);
-  const [statusFilter, setStatusFilter] = useState(null); // null means every status
-  const [phaseFilter, setPhaseFilter] = useState("all");
-  const [minArea, setMinArea] = useState("any");
+  /* One object for the three questions the plan can ask of its inventory, so
+     the filter shape sitePlan.js expects is built in exactly one place, and
+     the state a fresh plan opens in is sitePlan.NO_FILTERS. */
+  const [filters, setFilters] = useState(NO_FILTERS);
   const [copied, setCopied] = useState(false);
   const refs = useRef([]);
 
@@ -70,25 +72,24 @@ export default function SitePlan() {
      rule itself lives in sitePlan.statusCounts. */
   const counts = useMemo(() => statusCounts(LOTS), []);
 
-  const matching = useMemo(
-    () => visibleLots(LOTS, { statuses: statusFilter, phase: phaseFilter, minArea }),
-    [statusFilter, phaseFilter, minArea]
-  );
+  const matching = useMemo(() => visibleLots(LOTS, filters), [filters]);
 
   const matchingIds = useMemo(() => new Set(matching.map((l) => l.id)), [matching]);
-  const filterActive = filterIsActive({ statuses: statusFilter, phase: phaseFilter, minArea });
+  const filterActive = filterIsActive(filters);
 
   /* One tab stop for the whole plan. Which lot holds it, and what happens
      when a filter hides that lot, is sitePlan.focusTabIndex. */
   const tabIdx = focusTabIndex(LOTS, matching, focusIdx);
 
-  const toggleStatus = (status) => setStatusFilter((prev) => toggleStatusFilter(prev, status));
+  /* The status chips are one control, not four: what a press does to the
+     current selection is sitePlan.toggleStatusFilter. */
+  const toggleStatus = (status) =>
+    setFilters((prev) => ({ ...prev, statuses: toggleStatusFilter(prev.statuses, status) }));
 
-  const resetFilters = () => {
-    setStatusFilter(null);
-    setPhaseFilter("all");
-    setMinArea("any");
-  };
+  const clearStatus = () => setFilters((prev) => ({ ...prev, statuses: null }));
+  const setPhase = (phase) => setFilters((prev) => ({ ...prev, phase }));
+  const setSize = (minArea) => setFilters((prev) => ({ ...prev, minArea }));
+  const resetFilters = () => setFilters(NO_FILTERS);
 
   const onKeyDown = (e, index) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -222,8 +223,8 @@ export default function SitePlan() {
             <div className="plan-chips">
               <button
                 className="plan-chip plan-chip--all"
-                aria-pressed={!statusFilter}
-                onClick={() => setStatusFilter(null)}
+                aria-pressed={!filters.statuses}
+                onClick={clearStatus}
               >
                 All lots
               </button>
@@ -231,7 +232,7 @@ export default function SitePlan() {
                 <button
                   key={s}
                   className="plan-chip"
-                  aria-pressed={Boolean(statusFilter?.includes(s))}
+                  aria-pressed={Boolean(filters.statuses?.includes(s))}
                   onClick={() => toggleStatus(s)}
                 >
                   <span className={`swatch swatch--${s}`} aria-hidden="true" />
@@ -248,10 +249,8 @@ export default function SitePlan() {
               <select
                 id="plan-phase"
                 className="select select--compact"
-                value={phaseFilter}
-                onChange={(e) =>
-                  setPhaseFilter(e.target.value === "all" ? "all" : Number(e.target.value))
-                }
+                value={filters.phase}
+                onChange={(e) => setPhase(e.target.value === "all" ? "all" : Number(e.target.value))}
               >
                 <option value="all">All phases</option>
                 {LAYOUT.map(({ phase }) => (
@@ -267,8 +266,8 @@ export default function SitePlan() {
               <select
                 id="plan-size"
                 className="select select--compact"
-                value={minArea}
-                onChange={(e) => setMinArea(e.target.value === "any" ? "any" : Number(e.target.value))}
+                value={filters.minArea}
+                onChange={(e) => setSize(e.target.value === "any" ? "any" : Number(e.target.value))}
               >
                 <option value="any">Any size</option>
                 {LOT_SIZES.slice(1).map((s) => (
