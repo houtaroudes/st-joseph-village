@@ -13,9 +13,12 @@
 #     run: npm audit --audit-level=moderate
 name: CI
 
+# Every branch, not just main. This repo works straight on main with no pull
+# request flow, so a branch filter would leave a feature branch unchecked until
+# the moment it lands, which is when it is too late for the check to be cheap.
+# The concurrency group below keeps the extra runs from piling up.
 on:
   push:
-    branches: [main]
   pull_request:
 
 # A push that supersedes an earlier one makes the earlier run pointless, so
