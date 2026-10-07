@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LOT_PRICING, PAYMENT_TERMS, SCHEMES, peso } from "../data/village";
+import { LOT_PRICING, SCHEMES, peso } from "../data/village";
 import {
   BLOCK_W,
   BLOCK_W_WIDE,
@@ -17,7 +17,17 @@ import {
   lotName,
   lotSummary,
 } from "../lib/lots";
-import { sampleComputation } from "../lib/finance";
+import {
+  PLAN_ARROW_KEYS,
+  PLAN_TERMS,
+  filterIsActive,
+  focusTabIndex,
+  nextFocus,
+  planComparison,
+  statusCounts,
+  toggleStatusFilter,
+  visibleLots,
+} from "../lib/sitePlan";
 import { SHORTLIST_MAX, useVillage } from "../lib/useVillage";
 import {
   IconArrow,
@@ -44,48 +54,6 @@ import {
    shareable URL, and the same lot flows into the calculator and the form.
    ============================================================ */
 
-const STEPS = {
-  ArrowRight: [1, 0],
-  ArrowLeft: [-1, 0],
-  ArrowDown: [0, 1],
-  ArrowUp: [0, -1],
-};
-
-/* Nearest lot in the direction of the arrow, measured on the drawn plan.
-
-   This replaces a fixed index stride of four, which was wrong for the two
-   5-wide phases: Arrow Down from Lot 5-01 landed on 5-05, four columns to
-   the right, instead of 5-06 directly below it. It also wrapped around row
-   ends, so Arrow Left from the first lot of a row jumped up and to the
-   right. Geometry gets every block shape right, including the two that are
-   centred on their column, and it stops at the edge of the plan instead of
-   jumping somewhere else. */
-function nearestInDirection(from, candidates, dx, dy) {
-  let best = null;
-  let bestScore = Infinity;
-  for (const lot of candidates) {
-    if (lot.id === from.id) continue;
-    const ax = lot.cx - from.cx;
-    const ay = lot.cy - from.cy;
-    const forward = ax * dx + ay * dy;
-    if (forward <= 1) continue; // behind, or level with, the current lot
-    const sideways = Math.abs(ax * dy) + Math.abs(ay * dx);
-    const score = forward + sideways * 2.5; // prefer straight ahead
-    if (score < bestScore) {
-      bestScore = score;
-      best = lot;
-    }
-  }
-  return best;
-}
-
-const AMORT_TERMS = {
-  dpPct: PAYMENT_TERMS.defaultDpPct,
-  dpMonths: PAYMENT_TERMS.defaultDpMonths,
-  schemeId: SCHEMES.pagibig.id,
-  years: SCHEMES.pagibig.defaultYears,
-};
-
 export default function SitePlan() {
   const { selectedLotId, selectedLot, selectLot, clearSelection, shortlist, shortlistLots, toggleShortlist, clearShortlist, computeFor } =
     useVillage();
@@ -98,51 +66,23 @@ export default function SitePlan() {
   const refs = useRef([]);
 
   /* Unfiltered, and deliberately so: these are the inventory totals, and a
-     total that moved every time you filtered would be lying about stock. */
-  const counts = useMemo(
-    () =>
-      LOTS.reduce((acc, l) => {
-        acc[l.status] = (acc[l.status] || 0) + 1;
-        return acc;
-      }, {}),
-    []
-  );
+     total that moved every time you filtered would be lying about stock. The
+     rule itself lives in sitePlan.statusCounts. */
+  const counts = useMemo(() => statusCounts(LOTS), []);
 
   const matching = useMemo(
-    () =>
-      LOTS.filter(
-        (l) =>
-          (!statusFilter || statusFilter.includes(l.status)) &&
-          (phaseFilter === "all" || l.phase === phaseFilter) &&
-          (minArea === "any" || l.area >= minArea)
-      ),
+    () => visibleLots(LOTS, { statuses: statusFilter, phase: phaseFilter, minArea }),
     [statusFilter, phaseFilter, minArea]
   );
 
   const matchingIds = useMemo(() => new Set(matching.map((l) => l.id)), [matching]);
-  const filterActive = statusFilter !== null || phaseFilter !== "all" || minArea !== "any";
+  const filterActive = filterIsActive({ statuses: statusFilter, phase: phaseFilter, minArea });
 
-  /* One tab stop for the whole plan. It follows the focused lot while that
-     lot is still on screen, and falls back to the first matching one when a
-     filter has hidden it. With nothing matching, the plan leaves the tab
-     order entirely rather than offering a stop that does nothing. */
-  const tabIdx = matchingIds.has(LOTS[focusIdx]?.id)
-    ? focusIdx
-    : matching.length
-      ? LOT_INDEX[matching[0].id]
-      : -1;
+  /* One tab stop for the whole plan. Which lot holds it, and what happens
+     when a filter hides that lot, is sitePlan.focusTabIndex. */
+  const tabIdx = focusTabIndex(LOTS, matching, focusIdx);
 
-  const toggleStatus = (status) => {
-    setStatusFilter((prev) => {
-      if (!prev) return [status]; // solo it out of the All state
-      if (prev.includes(status)) {
-        const next = prev.filter((s) => s !== status);
-        return next.length ? next : null;
-      }
-      const next = [...prev, status];
-      return next.length === STATUS_ORDER.length ? null : next;
-    });
-  };
+  const toggleStatus = (status) => setStatusFilter((prev) => toggleStatusFilter(prev, status));
 
   const resetFilters = () => {
     setStatusFilter(null);
@@ -156,10 +96,9 @@ export default function SitePlan() {
       selectLot(LOTS[index].id);
       return;
     }
-    const step = STEPS[e.key];
-    if (!step) return;
+    if (!PLAN_ARROW_KEYS.includes(e.key)) return;
     e.preventDefault();
-    const next = nearestInDirection(LOTS[index], matching, step[0], step[1]);
+    const next = nextFocus(LOTS, matching, LOTS[index].id, e.key);
     if (!next) return;
     const nextIdx = LOT_INDEX[next.id];
     setFocusIdx(nextIdx);
@@ -181,16 +120,12 @@ export default function SitePlan() {
   const shortlistFull = shortlist.length >= SHORTLIST_MAX;
 
   /* The comparison. Lot only, on the terms the calculator opens with, so a
-     lot here and a lot there are priced the same way. */
-  const compareRows = useMemo(
-    () =>
-      shortlistLots.map((lot) => {
-        const calc = sampleComputation({ price: lot.price, ...AMORT_TERMS });
-        return { lot, monthly: calc.amortisation, perSqm: lot.price / lot.area };
-      }),
+     lot here and a lot there are priced the same way. The arithmetic and the
+     lowest-monthly rule are sitePlan.planComparison. */
+  const { rows: compareRows, lowestMonthly } = useMemo(
+    () => planComparison(shortlistLots),
     [shortlistLots]
   );
-  const lowestMonthly = compareRows.length > 1 ? Math.min(...compareRows.map((r) => r.monthly)) : null;
 
   return (
     <section className="section" id="plan">
@@ -480,7 +415,7 @@ export default function SitePlan() {
               <div>
                 <h3 className="shortlist-title">Shortlist</h3>
                 <p className="shortlist-sub">
-                  Lot only, {AMORT_TERMS.dpPct}% down over {AMORT_TERMS.years} years at{" "}
+                  Lot only, {PLAN_TERMS.dpPct}% down over {PLAN_TERMS.years} years at{" "}
                   {SCHEMES.pagibig.rate}%. Indicative.
                 </p>
               </div>

@@ -7,7 +7,7 @@
    This is arithmetic, not an offer of credit - see DISCLAIMER.
    ============================================================ */
 
-import { PAYMENT_TERMS, SCHEMES, LOT_PRICING } from "../data/village";
+import { PAYMENT_TERMS, SCHEMES, LOT_PRICING } from "../data/village.js";
 
 export function monthlyAmortisation(principal, annualRatePct, years) {
   const n = Math.round(years * 12);

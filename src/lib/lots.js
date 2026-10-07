@@ -14,8 +14,8 @@
    Every figure is illustrative, like the rest of the content model.
    ============================================================ */
 
-import { BLOCKS, LOT_PRICING } from "../data/village";
-import { lotPrice } from "./finance";
+import { BLOCKS, LOT_PRICING } from "../data/village.js";
+import { lotPrice } from "./finance.js";
 
 export const LOT_W = 52;
 export const LOT_H = 44;
