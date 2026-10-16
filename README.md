@@ -137,7 +137,7 @@ disclaimer lives there too.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
+npm run dev        # http://localhost:5330
 npm run build
 npm run lint       # oxlint
 ```
