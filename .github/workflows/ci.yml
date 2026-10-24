@@ -1,16 +1,7 @@
-# Runs the checks that gate this repo: the plan's tests, the linter, and the
-# build. The build is the one that matters most, because a broken build is what
-# takes the live site down, and it runs the same command Vercel runs.
-#
-# There is deliberately no security audit step here, unlike the portfolio repo.
-# This project has one open high advisory on a build-time transitive dependency
-# (source-map-js below 1.2.2, GHSA-68fv-2mgg-jv7q), so an audit gate would be
-# red on every push from its first run, and a gate that is always red is a gate
-# everybody learns to ignore. Clear the advisory with `npm audit fix`, then add
-# the step the portfolio uses:
-#
-#   - name: Audit dependencies
-#     run: npm audit --audit-level=moderate
+# Runs the checks that gate this repo: the dependency audit, the plan's tests,
+# the linter, and the build. The build is the one that matters most, because a
+# broken build is what takes the live site down, and it runs the same command
+# Vercel runs.
 name: CI
 
 # Every branch, not just main. This repo works straight on main with no pull
@@ -32,7 +23,7 @@ permissions:
 
 jobs:
   verify:
-    name: Test, lint and build
+    name: Audit, test, lint and build
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
@@ -48,6 +39,12 @@ jobs:
       # pins, so CI cannot pass on a version the lock file does not describe.
       - name: Install dependencies
         run: npm ci
+
+      # Fails only on moderate or worse, so low-severity noise cannot block a
+      # deploy on its own. It waited for the source-map-js advisory to clear,
+      # because a gate that is always red is a gate everybody learns to ignore.
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
 
       - name: Lint
         run: npm run lint
