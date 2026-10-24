@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.1",
-    "framer-motion": "^13.4.4",
+    "framer-motion": "^14.5.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "reicon-react": "^1.2.5",
